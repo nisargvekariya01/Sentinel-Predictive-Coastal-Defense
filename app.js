@@ -13,8 +13,27 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const { isLoggedIn } = require("./middleware");
+const twilio = require("twilio");
 
 const dbUrl = process.env.ATLASDB_URL;
+
+/*
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = twilio(accountSid, authToken);
+
+async function createMessage() {
+  const message = await client.messages.create({
+    body: "This is the ship that made the Kessel Run in fourteen parsecs?",
+    from: "+17752577720",
+    to: "+916355244352",
+  });
+
+  console.log(message.body);
+}
+
+createMessage();
+*/
 
 main()
   .then(() => {
@@ -135,7 +154,6 @@ app.get("/dashboard", isLoggedIn, async (req, res) => {
         `${process.env.WEATHER_API_URL}?q=${user.city}&appid=${process.env.WEATHER_API_KEY}&units=metric`
       );
       let jsonResponse = await response.json();
-      console.log(jsonResponse);
       let result = {
         city: jsonResponse.name,
         temp: jsonResponse.main.temp,
@@ -151,7 +169,6 @@ app.get("/dashboard", isLoggedIn, async (req, res) => {
     }
   };
   let weatherInfo = await getWeatherInfo();
-  console.log(weatherInfo);
   res.render("./users/dashboard", { user: user, weatherInfo: weatherInfo });
 });
 
