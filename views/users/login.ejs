@@ -1,0 +1,29 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<div class="s-container">
+  <div class="signup-container">
+    <form id="signup-form" method="post" action="/login">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input
+          type="email"
+          id="email"
+          name="username"
+          placeholder="asha.patel@example.com"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+
+      <p>
+        Don't have an account?
+        <a style="color: #4caf50" href="/signup">Signup</a>
+      </p>
+
+      <button type="submit" class="submit-btn">Login & Stay Safe</button>
+    </form>
+  </div>
+</div>

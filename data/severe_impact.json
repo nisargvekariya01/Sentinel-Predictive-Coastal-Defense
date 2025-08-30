@@ -1,0 +1,42 @@
+{
+  "threatLevel": "Severe",
+  "summary": "A 3.5-meter storm surge is predicted for the Kutch and Porbandar coastal regions. Catastrophic flooding is imminent, with high risk to critical industrial, medical, and power infrastructure.",
+  "infrastructureAtRisk": [
+    {
+      "name": "Mundra Port",
+      "type": "Port",
+      "coords": [69.7044, 22.7368],
+      "risk": "High"
+    },
+    {
+      "name": "Mundra Thermal Power Station",
+      "type": "Power",
+      "coords": [69.5529, 22.8228],
+      "risk": "High"
+    },
+    {
+      "name": "Adani Hospital Mundra",
+      "type": "Hospital",
+      "coords": [69.7139, 22.8068],
+      "risk": "High"
+    },
+    {
+      "name": "Porbandar Port",
+      "type": "Port",
+      "coords": [69.5887, 21.6214],
+      "risk": "Medium"
+    },
+    {
+      "name": "Hope Hospital",
+      "type": "Hospital",
+      "coords": [69.615, 21.6386],
+      "risk": "Medium"
+    }
+  ],
+  "recommendedActions":,
+  "blueCarbonRisk": {
+    "asset": "Gulf of Kutch Mangrove Ecosystem",
+    "riskScore": 9.2,
+    "estimatedCarbonReleaseTonnes": 1500
+  }
+}

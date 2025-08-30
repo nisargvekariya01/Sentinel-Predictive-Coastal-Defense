@@ -1,0 +1,35 @@
+{
+  "threatLevel": "Moderate",
+  "summary": "A 1.5-meter storm surge is predicted for the Porbandar coastal area. Minor to moderate flooding is expected, with potential impact on low-lying infrastructure and public areas.",
+  "infrastructureAtRisk": [
+    {
+      "name": "Hope Hospital",
+      "type": "Hospital",
+      "coords": [69.615, 21.6386],
+      "risk": "Medium"
+    },
+    {
+      "name": "Porbandar Port",
+      "type": "Port",
+      "coords": [69.5887, 21.6214],
+      "risk": "Medium"
+    },
+    {
+      "name": "Porbandar Chopati",
+      "type": "Beach",
+      "coords": [69.6092, 21.6305],
+      "risk": "Low"
+    }
+  ],
+  "recommendedActions": [
+    "Advise Hope Hospital to prepare for potential patient influx and verify emergency power sources.",
+    "Issue targeted warnings to Porbandar Port authorities to secure vessels and equipment.",
+    "Close public access to Porbandar Chopati and surrounding low-lying coastal roads.",
+    "Prepare local emergency response teams for potential water rescues in the Porbandar area."
+  ],
+  "blueCarbonRisk": {
+    "asset": "Porbandar Coastal Mangrove Patch",
+    "riskScore": 4.5,
+    "estimatedCarbonReleaseTonnes": 250
+  }
+}

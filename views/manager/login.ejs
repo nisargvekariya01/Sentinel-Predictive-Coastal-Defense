@@ -1,0 +1,24 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<div class="s-container">
+  <div class="signup-container">
+    <form id="signup-form" method="post" action="/mlogin">
+      <div class="form-group">
+        <label for="email">Username</label>
+        <input
+          type="string"
+          id="username"
+          name="username"
+          placeholder="asha_patel01"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required />
+      </div>
+
+      <button type="submit" class="submit-btn">Login & Stay Safe</button>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,422 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<main>
+  <div class="dashboard-container" style="margin-top: 8px">
+    <div class="panel control-panel">
+      <div class="panel-header">
+        <i class="fas fa-cogs"></i>
+        <h3>Control Center</h3>
+      </div>
+      <div class="panel-body">
+        <div class="control-section">
+          <h4><i class="fas fa-brain"></i> AI Threat Simulation</h4>
+          <p>
+            Trigger a simulated threat to see the predicted consequences. This
+            is the core of your hackathon demo.
+          </p>
+          <button id="simulate-moderate" class="btn btn-warning">
+            <i class="fas fa-cloud-sun-rain"></i> Simulate Moderate Threat
+          </button>
+          <button id="simulate-severe" class="btn btn-danger">
+            <i class="fas fa-wind"></i> Simulate Severe Threat
+          </button>
+        </div>
+
+        <div class="control-section">
+          <h4><i class="fas fa-bullhorn"></i> Issue Community Alert</h4>
+          <p>
+            Send a targeted alert to a specific locality based on the simulation
+            results.
+          </p>
+          <div class="form-group">
+            <label for="alert-locality">Target Locality</label>
+            <select id="alert-locality">
+              <option value="All">All Registered Users</option>
+              <option value="Mundra">Mundra Area</option>
+              <option value="Porbandar">Porbandar Area</option>
+            </select>
+          </div>
+          <div class="form-group" style="width: 275px">
+            <label for="alert-message">Alert Message</label>
+            <textarea
+              id="alert-message"
+              rows="4"
+              placeholder="e.g., Storm surge warning. Evacuate coastal areas immediately."
+            ></textarea>
+          </div>
+          <button id="send-alert" class="btn btn-primary">
+            <i class="fas fa-paper-plane"></i> Dispatch Alert
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel map-panel">
+      <div id="map"></div>
+      <div class="map-overlay">
+        <h4>Live Threat Assessment Map</h4>
+        <p>Gujarat Coastal Region</p>
+      </div>
+    </div>
+
+    <div class="panel data-panel">
+      <div class="data-section">
+        <div class="panel-header">
+          <i class="fas fa-users"></i>
+          <h3>Registered Community</h3>
+        </div>
+        <div class="table-container">
+          <table id="users-table">
+            <thead>
+              <tr>
+                <th data-sort="name">Name <i class="fas fa-sort"></i></th>
+                <th data-sort="city">City <i class="fas fa-sort"></i></th>
+                <th data-sort="locality">
+                  Locality <i class="fas fa-sort"></i>
+                </th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="data-section" id="impact-assessment-section">
+        <div class="panel-header">
+          <i class="fas fa-chart-pie"></i>
+          <h3>Impact Assessment</h3>
+        </div>
+        <div class="panel-body" id="impact-assessment-body">
+          <p class="placeholder">
+            Run a simulation to see the predicted impact analysis.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<style>
+  /* --- Dashboard Specific Styles --- */
+  main {
+    padding-top: 70px; /* Height of the fixed header */
+    height: calc(100vh - 70px);
+    box-sizing: border-box;
+  }
+
+  .dashboard-container {
+    display: grid;
+    grid-template-columns: 350px 1fr 400px; /* 3-column layout */
+    grid-template-rows: 1fr;
+    height: 100%;
+    gap: 15px;
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .panel {
+    background-color: var(--medium-bg);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .panel-header {
+    background-color: #2c2c2c;
+    padding: 15px;
+    border-bottom: 1px solid #444;
+    display: flex;
+    align-items: center;
+  }
+
+  .panel-header i {
+    color: var(--sentinel-green);
+    margin-right: 10px;
+    font-size: 1.2em;
+  }
+
+  .panel-header h3 {
+    margin: 0;
+    color: var(--light-text);
+  }
+
+  .panel-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+
+  /* --- Control Panel --- */
+  .control-section {
+    margin-bottom: 30px;
+  }
+  .control-section h4 {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: var(--light-text);
+  }
+  .control-section h4 i {
+    margin-right: 8px;
+    color: var(--sentinel-blue);
+  }
+  .control-section p {
+    font-size: 0.9em;
+    color: var(--medium-text);
+    margin-bottom: 15px;
+  }
+  .control-section.btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1em;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .btn-warning {
+    background-color: #f39c12;
+    color: white;
+  }
+  .btn-danger {
+    background-color: #e74c3c;
+    color: white;
+  }
+  .form-group {
+    margin-bottom: 15px;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: var(--medium-text);
+  }
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--dark-bg);
+    border: 1px solid #555;
+    border-radius: 4px;
+    color: var(--light-text);
+  }
+
+  /* --- Map Panel --- */
+  .map-panel {
+    position: relative;
+  }
+  #map {
+    width: 100%;
+    height: 100%;
+  }
+  .map-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px 15px;
+    border-radius: 5px;
+    z-index: 10;
+  }
+  .map-overlay h4,
+  .map-overlay p {
+    margin: 0;
+  }
+
+  /* --- Data Panel --- */
+  .data-panel {
+    gap: 15px;
+  }
+  .data-section {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--medium-bg);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  #impact-assessment-section {
+    flex-grow: 1;
+  }
+  .table-container {
+    overflow-y: auto;
+    max-height: 300px;
+  }
+  #users-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  #users-table th,
+  #users-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+  }
+  #users-table thead {
+    background-color: #2c2c2c;
+    position: sticky;
+    top: 0;
+  }
+  #users-table th {
+    cursor: pointer;
+    user-select: none;
+  }
+  #users-table th i {
+    margin-left: 5px;
+    color: var(--dark-text);
+  }
+  #users-table th.sorted-asc i,
+  #users-table th.sorted-desc i {
+    color: var(--sentinel-green);
+  }
+  #impact-assessment-body.placeholder {
+    color: var(--dark-text);
+    font-style: italic;
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 1200px) {
+    .dashboard-container {
+      grid-template-columns: 300px 1fr;
+      grid-template-rows: auto auto;
+    }
+    .map-panel {
+      grid-column: 2 / 3;
+      grid-row: 1 / 3;
+    }
+    .data-panel {
+      grid-column: 1 / 2;
+      grid-row: 2 / 3;
+    }
+  }
+  @media (max-width: 768px) {
+    .dashboard-container {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 50vh auto;
+      height: auto;
+    }
+    .control-panel,
+    .map-panel,
+    .data-panel {
+      grid-column: 1 / 2;
+    }
+    .control-panel {
+      grid-row: 1 / 2;
+    }
+    .map-panel {
+      grid-row: 2 / 3;
+    }
+    .data-panel {
+      grid-row: 3 / 4;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // --- MOCK DATA FOR DEMONSTRATION ---
+    const registeredUsers = [];
+
+    const tableBody = document.querySelector("#users-table tbody");
+    const headers = document.querySelectorAll("#users-table th");
+    let currentSort = { key: "name", order: "asc" };
+
+    // --- TABLE SORTING LOGIC ---
+    function sortData(key) {
+      const order =
+        currentSort.key === key && currentSort.order === "asc" ? "desc" : "asc";
+      currentSort = { key, order };
+
+      registeredUsers.sort((a, b) => {
+        if (a[key] < b[key]) return order === "asc" ? -1 : 1;
+        if (a[key] > b[key]) return order === "asc" ? 1 : -1;
+        return 0;
+      });
+
+      renderTable();
+      updateHeaderIcons();
+    }
+
+    function updateHeaderIcons() {
+      headers.forEach((header) => {
+        const key = header.dataset.sort;
+        const icon = header.querySelector("i");
+        header.classList.remove("sorted-asc", "sorted-desc");
+        icon.className = "fas fa-sort";
+
+        if (key === currentSort.key) {
+          header.classList.add(
+            currentSort.order === "asc" ? "sorted-asc" : "sorted-desc"
+          );
+          icon.className =
+            currentSort.order === "asc" ? "fas fa-sort-up" : "fas fa-sort-down";
+        }
+      });
+    }
+
+    headers.forEach((header) => {
+      header.addEventListener("click", () => sortData(header.dataset.sort));
+    });
+
+    // --- TABLE RENDERING LOGIC ---
+    function renderTable() {
+      tableBody.innerHTML = "";
+      registeredUsers.forEach((user) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+                    <td>${user.name}</td>
+                    <td>${user.city}</td>
+                    <td>${user.locality}</td>
+                `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    // --- ALERTING LOGIC (DEMO) ---
+    document.getElementById("send-alert").addEventListener("click", () => {
+      const locality = document.getElementById("alert-locality").value;
+      const message = document.getElementById("alert-message").value;
+      if (!message) {
+        alert("Please enter an alert message.");
+        return;
+      }
+      // alert(Simulating alert dispatch...\n\nTo: ${locality}\nMessage: "${message}"\n\n(In the real app, this would trigger the Twilio SMS API));
+    });
+
+    // --- INITIALIZE ---
+    renderTable();
+    updateHeaderIcons();
+  });
+</script>
+
+<!-- MapLibre JS -->
+<script src="https://unpkg.com/maplibre-gl@3.6.1/dist/maplibre-gl.js"></script>
+
+<script>
+  const mapToken = "<%= mapToken %>";
+  const map = new maplibregl.Map({
+    container: "map",
+    style: `https://api.maptiler.com/maps/streets/style.json?key=${mapToken}`,
+    center: [72.6714, 23.2156],
+    zoom: 10,
+  });
+
+  map.addControl(new maplibregl.NavigationControl(), "top-right");
+
+  const markerElement = document.createElement("div");
+  markerElement.innerHTML = '<i class="fa-solid fa-compass"></i>';
+  markerElement.style.backgroundColor = "white";
+  markerElement.style.opacity = "0.8";
+  markerElement.style.borderRadius = "50%";
+
+  new maplibregl.Marker({ element: markerElement })
+    .setLngLat([72.6714, 23.2156])
+    .setPopup(
+      new maplibregl.Popup({ offset: 25 }).setHTML(
+        `<p>Exact Location will be provided after booking</p>`
+      )
+    )
+    .addTo(map);
+</script>

@@ -1,0 +1,351 @@
+<% layout('layouts/boilerplate.ejs') -%>
+
+<main>
+  <div class="user-dashboard-container">
+    <div class="welcome-header">
+      <h1>Welcome, <%= user.name %></h1>
+      <div class="status-banner status-safe">
+        <i class="fas fa-check-circle"></i>
+        <span>Current Status: All Clear</span>
+      </div>
+    </div>
+
+    <div class="dashboard-grid">
+      <div class="panel announcements-panel">
+        <div class="panel-header">
+          <i class="fas fa-bullhorn"></i>
+          <h3>Recent Alerts & Announcements</h3>
+        </div>
+        <div class="panel-body" id="announcements-list"></div>
+      </div>
+
+      <div class="panel ecosystem-panel">
+        <div class="panel-header">
+          <i class="fas fa-leaf"></i>
+          <h3>Your Local Blue Carbon Ecosystem</h3>
+        </div>
+        <div class="panel-body">
+          <h4>Porbandar Coastal Mangrove Patch</h4>
+          <p>
+            The health of our local mangroves is vital for coastal protection
+            and climate resilience. Here's the current assessment based on our
+            latest data.
+          </p>
+          <div class="health-metric">
+            <label>Mangrove Health Index (MHI)</label>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" id="mhi-progress"></div>
+            </div>
+            <span id="mhi-value" class="metric-value"></span>
+          </div>
+          <div class="health-metric">
+            <label>Est. Carbon Sequestration Rate</label>
+            <p class="metric-value large-metric" id="carbon-rate"></p>
+            <p class="metric-unit">tonnes CO₂ / hectare / year</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel weather-panel">
+        <div class="panel-header">
+          <i class="fas fa-cloud-sun"></i>
+          <h3>Local Weather</h3>
+        </div>
+        <div class="panel-body">
+          <div class="weather-info">
+            <i class="fas fa-map-marker-alt"></i>
+            <span
+              ><%= user.locality %>, <%= user.city %>, <%= user.state %></span
+            >
+          </div>
+          <div class="weather-info">
+            <i class="fas fa-thermometer-half"></i>
+            <span>Temperature: <strong><%= weatherInfo.temp %>°C</strong></span>
+          </div>
+          <div class="weather-info">
+            <i class="fas fa-wind"></i>
+            <span>Wind: <strong>15 km/h SW</strong></span>
+          </div>
+          <div class="weather-info">
+            <i class="fas fa-tint"></i>
+            <span>Humidity: <strong><%= weatherInfo.humidity %>%</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel profile-panel">
+        <div class="panel-header">
+          <i class="fas fa-user-cog"></i>
+          <h3>My Profile & Settings</h3>
+        </div>
+        <div class="panel-body">
+          <p>
+            Manage your contact information and alert preferences to ensure you
+            always receive critical updates.
+          </p>
+          <button class="btn btn-primary full-width">
+            <i class="fas fa-edit"></i> Edit My Profile
+          </button>
+          <button class="btn btn-secondary full-width">
+            <i class="fas fa-book-open"></i> View Safety Guidelines
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<style>
+  /* --- User Dashboard Specific Styles --- */
+  main {
+    padding-top: 100px;
+    padding-bottom: 40px;
+  }
+  .user-dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .welcome-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .welcome-header h1 {
+    font-size: 2.5em;
+    margin: 0 0 15px 0;
+  }
+  .status-banner {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: bold;
+  }
+  .status-banner.status-safe {
+    background-color: rgba(76, 175, 80, 0.2);
+    color: var(--sentinel-green);
+    border: 1px solid var(--sentinel-green);
+  }
+  .status-banner.status-warning {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+  }
+  .status-banner i {
+    margin-right: 10px;
+  }
+
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+  }
+
+  .panel {
+    background-color: var(--medium-bg);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  .announcements-panel {
+    grid-column: span 2; /* Make this panel wider */
+  }
+  .panel-header {
+    background-color: #2c2c2c;
+    padding: 15px;
+    border-bottom: 1px solid #444;
+    display: flex;
+    align-items: center;
+  }
+  .panel-header i {
+    color: var(--sentinel-green);
+    margin-right: 10px;
+    font-size: 1.2em;
+  }
+  .panel-header h3 {
+    margin: 0;
+    color: var(--light-text);
+  }
+  .panel-body {
+    padding: 20px;
+    flex-grow: 1;
+  }
+  .panel-body p {
+    color: var(--medium-text);
+    line-height: 1.7;
+  }
+
+  /* Announcements Panel */
+  .announcement-item {
+    padding: 15px;
+    border-bottom: 1px solid #333;
+  }
+  .announcement-item:last-child {
+    border-bottom: none;
+  }
+  .announcement-item.alert-severe {
+    border-left: 4px solid #e74c3c;
+    background-color: rgba(231, 76, 60, 0.1);
+  }
+  .announcement-item.alert-info {
+    border-left: 4px solid var(--sentinel-blue);
+  }
+  .announcement-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  .announcement-header h4 {
+    margin: 0;
+    font-size: 1.1em;
+  }
+  .announcement-header.date {
+    font-size: 0.8em;
+    color: var(--dark-text);
+  }
+  .announcement-item p {
+    margin: 0;
+    font-size: 0.9em;
+  }
+
+  /* Ecosystem Panel */
+  .health-metric {
+    margin-bottom: 25px;
+  }
+  .health-metric label {
+    display: block;
+    color: var(--medium-text);
+    margin-bottom: 8px;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: var(--dark-bg);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      var(--sentinel-teal),
+      var(--sentinel-green)
+    );
+    border-radius: 10px;
+    transition: width 1s ease-out;
+  }
+  .metric-value {
+    font-weight: bold;
+    color: var(--sentinel-green);
+  }
+  .large-metric {
+    font-size: 2.5em;
+  }
+  .metric-unit {
+    font-size: 0.9em;
+    color: var(--dark-text);
+    margin-top: -10px;
+  }
+
+  /* Weather & Profile Panels */
+  .weather-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+  }
+  .weather-info i {
+    color: var(--sentinel-blue);
+    margin-right: 15px;
+    width: 20px;
+    text-align: center;
+  }
+  .btn.full-width {
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+  }
+</style>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // --- MOCK DATA FOR DEMONSTRATION ---
+    // This data simulates what would be fetched from your backend server.
+
+    // 1. Recent Announcements Data
+    const announcements = [
+      {
+        title: "Severe Cyclone Warning",
+        date: "2024-06-15",
+        summary:
+          "A severe cyclone is expected to make landfall near Porbandar within the next 48 hours. Residents are advised to stay indoors and follow official guidance.",
+        type: "severe",
+      },
+      {
+        title: "Tide Gauge Maintenance",
+        date: "2024-06-10",
+        summary:
+          "Scheduled maintenance of the local tide gauge will occur on June 12th. Temporary disruptions in data reporting may occur.",
+        type: "info",
+      },
+      {
+        title: "Community Alert Signup",
+        date: "2024-06-05",
+        summary:
+          "Join our community alerts to receive real-time notifications about coastal threats and safety information.",
+        type: "info",
+      },
+    ];
+
+    // 2. Ecosystem Health Data
+    const ecosystemData = {
+      mhi: 82, // Mangrove Health Index (out of 100)
+      carbonRate: 12.5, // Tonnes of CO2 per hectare per year
+    };
+
+    // --- DYNAMIC RENDERING FUNCTIONS ---
+
+    // Function to render announcements
+    function renderAnnouncements() {
+      const listElement = document.getElementById("announcements-list");
+      listElement.innerHTML = ""; // Clear existing content
+
+      announcements.forEach((item) => {
+        const itemDiv = document.createElement("div");
+        itemDiv.className = `announcement-item alert-${item.type}`;
+
+        itemDiv.innerHTML = `
+                    <div class="announcement-header">
+                        <h4>${item.title}</h4>
+                        <span class="date">${item.date}</span>
+                    </div>
+                    <p>${item.summary}</p>
+                `;
+        listElement.appendChild(itemDiv);
+      });
+    }
+
+    // Function to render ecosystem health data
+    function renderEcosystemData() {
+      const mhiProgress = document.getElementById("mhi-progress");
+      const mhiValue = document.getElementById("mhi-value");
+      const carbonRate = document.getElementById("carbon-rate");
+
+      // Animate the progress bar
+      setTimeout(() => {
+        mhiProgress.style.width = `${ecosystemData.mhi}%`;
+      }, 100); // Small delay for animation effect
+
+      mhiValue.textContent = `${ecosystemData.mhi}% (Healthy)`;
+      carbonRate.textContent = ecosystemData.carbonRate;
+    }
+
+    // --- INITIALIZE THE DASHBOARD ---
+    renderAnnouncements();
+    renderEcosystemData();
+  });
+</script>
