@@ -58,7 +58,7 @@ const sessionOptions = {
 app.use(session(sessionOptions));
 
 app.get("/", (req, res) => {
-  res.render("./layouts/boilerplate.ejs");
+  res.render("./home.ejs");
 });
 
 app.get("/signup", (req, res) => {
