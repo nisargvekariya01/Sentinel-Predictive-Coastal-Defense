@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Project Sentinel - Community Alert Signup</title>
+    <style>
+      /* --- Theming and Base Styles --- */
+      body {
+        margin: 0;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+        background-color: #1a1a1a;
+        color: #f0f0f0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+
+      /* --- Form Container --- */
+      .signup-container {
+        background-color: #242424;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 500px;
+        border: 1px solid #333;
+      }
+
+      /* --- Header --- */
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .header h1 {
+        color: #4caf50; /* Sentinel Green */
+        margin: 0;
+        font-size: 2em;
+      }
+
+      .header p {
+        color: #aaa;
+        font-size: 1em;
+      }
+
+      /* --- Form Elements --- */
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #ccc;
+        font-weight: 500;
+      }
+
+      .form-group input,
+      .form-group select {
+        width: 100%;
+        padding: 12px;
+        background-color: #333;
+        border: 1px solid #555;
+        border-radius: 4px;
+        color: #f0f0f0;
+        font-size: 16px;
+        box-sizing: border-box; /* Important for padding */
+      }
+
+      .form-group input:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #4caf50;
+        box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+      }
+
+      /* --- Submit Button --- */
+      .submit-btn {
+        width: 100%;
+        padding: 15px;
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 18px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+      }
+
+      .submit-btn:hover {
+        background-color: #45a049;
+      }
+
+      /* --- Success Message --- */
+      #success-message {
+        text-align: center;
+        color: #4caf50;
+        margin-top: 20px;
+        display: none; /* Hidden by default */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="signup-container">
+      <div class="header">
+        <h1>Join Project Sentinel</h1>
+        <p>Register to receive hyper-local coastal threat alerts.</p>
+      </div>
+
+      <form id="signup-form" method="post" action="/signup">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="e.g., Asha Patel"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="mobile">Mobile Number</label>
+          <input
+            type="tel"
+            id="mobile"
+            name="mobile"
+            placeholder="+91 XXXXX XXXXX"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="asha.patel@example.com"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required />
+        </div>
+
+        <div class="form-group">
+          <label for="state">State</label>
+          <select id="state" name="state">
+            <option value="Gujarat" selected>Gujarat</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="city">City / District</label>
+          <select id="city" name="city" required>
+            <option value="" disabled selected>
+              -- Select your City/District --
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="locality">Locality / Village / Taluka</label>
+          <select id="locality" name="locality" required>
+            <option value="" disabled selected>
+              -- Select your Locality --
+            </option>
+          </select>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          Create Account & Stay Safe
+        </button>
+      </form>
+
+      <p id="success-message">
+        Registration successful! You are now part of the Sentinel network.
+      </p>
+    </div>
+
+    <script>
+      // This script runs on the client-side to make the form interactive.
+
+      // --- Realistic Location Data for Gujarat ---
+      // This data is used to populate the dropdowns dynamically.
+      // Sourced from public government and community datasets. [5, 6]
+      const gujaratLocations = {
+        Ahmedabad: [
+          "Ahmedabad City",
+          "Daskroi",
+          "Dholka",
+          "Sanand",
+          "Viramgam",
+          "Detroj-Rampura",
+          "Bavla",
+          "Mandal",
+          "Ranpur",
+          "Barwala",
+        ],
+        Amreli: [
+          "Amreli",
+          "Babra",
+          "Bagasara",
+          "Dhari",
+          "Jafrabad",
+          "Khambha",
+          "Kunkavav",
+          "Lathi",
+          "Rajula",
+          "Savarkundla",
+        ],
+        Bharuch: [
+          "Bharuch",
+          "Amod",
+          "Ankleshwar",
+          "Hansot",
+          "Jambusar",
+          "Jhagadia",
+          "Vagra",
+        ],
+        Bhavnagar: [
+          "Bhavnagar",
+          "Gariadhar",
+          "Ghogha",
+          "Mahuva",
+          "Palitana",
+          "Sihor",
+          "Talaja",
+          "Umrala",
+        ],
+        "Devbhoomi Dwarka": ["Khambhalia", "Bhanvad", "Dwarka", "Kalyanpur"],
+        Jamnagar: [
+          "Jamnagar",
+          "Dhrol",
+          "Jamjodhpur",
+          "Jodiya",
+          "Kalavad",
+          "Lalpur",
+        ],
+        Junagadh: [
+          "Junagadh",
+          "Bhesan",
+          "Keshod",
+          "Manavadar",
+          "Mangrol",
+          "Mendarda",
+          "Vanthali",
+          "Visavadar",
+        ],
+        Kutch: [
+          "Bhuj",
+          "Anjar",
+          "Bhachau",
+          "Gandhidham",
+          "Mandvi",
+          "Mundra",
+          "Nakhatrana",
+          "Rapar",
+        ],
+        Navsari: [
+          "Navsari",
+          "Jalalpore",
+          "Gandevi",
+          "Chikhli",
+          "Khergam",
+          "Vansda",
+        ],
+        Porbandar: ["Porbandar", "Kutiyana", "Ranavav"],
+        Rajkot: [
+          "Rajkot",
+          "Dhoraji",
+          "Gondal",
+          "Jamkandorna",
+          "Jasdan",
+          "Jetpur",
+          "Kotda Sangani",
+          "Lodhika",
+          "Morbi",
+          "Paddhari",
+        ],
+        Surat: [
+          "Surat City",
+          "Bardoli",
+          "Choryasi",
+          "Kamrej",
+          "Mahuva",
+          "Mandvi",
+          "Mangrol",
+          "Olpad",
+          "Palsana",
+          "Umarpada",
+        ],
+        Surendranagar: [
+          "Surendranagar",
+          "Chotila",
+          "Dhrangadhra",
+          "Halvad",
+          "Lakhtar",
+          "Limbdi",
+          "Muli",
+          "Patdi",
+          "Sayla",
+          "Thangadh",
+          "Wadhwan",
+        ],
+        Valsad: [
+          "Valsad",
+          "Dharampur",
+          "Kaprada",
+          "Pardi",
+          "Umbergaon",
+          "Vapi",
+        ],
+      };
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Get references to the form elements ---
+        const citySelect = document.getElementById("city");
+        const localitySelect = document.getElementById("locality");
+        const signupForm = document.getElementById("signup-form");
+        const successMessage = document.getElementById("success-message");
+
+        // --- Step 1: Populate the City/District dropdown ---
+        // Get all the keys (city names) from our data object
+        const cities = Object.keys(gujaratLocations);
+        // Sort them alphabetically for a better user experience
+        cities.sort();
+        // Create an <option> element for each city and add it to the dropdown
+        cities.forEach((city) => {
+          const option = document.createElement("option");
+          option.value = city;
+          option.textContent = city;
+          citySelect.appendChild(option);
+        });
+
+        // --- Step 2: Create an event listener for the City dropdown ---
+        // This will run every time the user selects a new city.
+        citySelect.addEventListener("change", () => {
+          // Get the currently selected city
+          const selectedCity = citySelect.value;
+
+          // Clear out any old options from the locality dropdown
+          localitySelect.innerHTML =
+            '<option value="" disabled selected>-- Select your Locality --</option>';
+
+          if (selectedCity) {
+            // Get the list of localities for the selected city
+            const localities = gujaratLocations[selectedCity];
+            // Sort them alphabetically
+            localities.sort();
+            // Create and add new <option> elements for each locality
+            localities.forEach((locality) => {
+              const option = document.createElement("option");
+              option.value = locality;
+              option.textContent = locality;
+              localitySelect.appendChild(option);
+            });
+          }
+        });
+
+        // --- Step 3: Handle the form submission ---
+        // This runs when the user clicks the "Create Account" button.
+      });
+    </script>
+  </body>
+</html>
