@@ -33,7 +33,13 @@
       "risk": "Medium"
     }
   ],
-  "recommendedActions":,
+  "recommendedActions": [
+    "Activate full emergency protocols at Mundra Port and Mundra Thermal Power Station.",
+    "Evacuate non-essential personnel from Adani Hospital Mundra and ensure backup power systems are operational.",
+    "Deploy flood barriers and sandbags around critical infrastructure in Kutch region.",
+    "Coordinate with local authorities to establish emergency shelters and medical aid stations in safe zones.",
+    "Monitor weather updates continuously and prepare for potential evacuation orders in Porbandar area."
+  ],
   "blueCarbonRisk": {
     "asset": "Gulf of Kutch Mangrove Ecosystem",
     "riskScore": 9.2,
