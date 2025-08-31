@@ -14,6 +14,7 @@ const LocalStrategy = require("passport-local");
 const User = require("./models/user");
 const { isLoggedIn } = require("./middleware");
 const twilio = require("twilio");
+const PORT = process.env.PORT || 3000;
 
 const dbUrl = process.env.ATLASDB_URL;
 
@@ -193,6 +194,6 @@ app.get("/mdashboard", (req, res) => {
   res.render("./manager/dashboard", { mapToken: mapToken });
 });
 
-app.listen(8000, () => {
-  console.log("Server listening on port 8000");
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
