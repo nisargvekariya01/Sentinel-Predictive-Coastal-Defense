@@ -317,7 +317,18 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     // --- MOCK DATA FOR DEMONSTRATION ---
-    const registeredUsers = [];
+    const registeredUsers = [
+      { name: "Alice Johnson", city: "Gandhinagar", locality: "Mundra" },
+      { name: "Bob Smith", city: "Ahmedabad", locality: "Porbandar" },
+      { name: "Charlie Brown", city: "Surat", locality: "Mundra" },
+      { name: "Diana Prince", city: "Vadodara", locality: "Porbandar" },
+      { name: "Ethan Hunt", city: "Rajkot", locality: "Mundra" },
+      { name: "Fiona Glenanne", city: "Bhavnagar", locality: "Porbandar" },
+      { name: "George Bailey", city: "Jamnagar", locality: "Mundra" },
+      { name: "Hannah Montana", city: "Junagadh", locality: "Porbandar" },
+      { name: "Ian Fleming", city: "Anand", locality: "Mundra" },
+      { name: "Jane Doe", city: "Nadiad", locality: "Porbandar" },
+    ];
 
     const tableBody = document.querySelector("#users-table tbody");
     const headers = document.querySelectorAll("#users-table th");
